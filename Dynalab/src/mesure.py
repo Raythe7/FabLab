@@ -145,12 +145,18 @@ class MeasureLength(dynalab.Ext):
                 tMin += values[0] * val
                 tMax += values[1] * val
 
+        # Fonctions propre a l'affichage        
+        uMin = csvReader.uniteTemps(tMin)
+        uMax = csvReader.uniteTemps(3601)
+        tMin = csvReader.transfo(tMin)
+        tMax = csvReader.transfo(tMax)
+        
         self.message(
             _(
                 """
-                Le chemin va prendre entre {tMin:.2f} s et {tMax:.2f} s à être dessiné
+                Le chemin va prendre entre {tMin} {uMin} et {tMax} {uMax} à être dessiné
                 """
-            ).format(tMin=tMin,tMax=tMax)
+            ).format(tMin=tMin,tMax=tMax,uMin=uMin,uMax=uMax)
         )
 
    
