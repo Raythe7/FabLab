@@ -147,10 +147,10 @@ class MeasureLength(dynalab.Ext):
 
         # Fonctions propre a l'affichage        
         uMin = csvReader.uniteTemps(tMin)
-        uMax = csvReader.uniteTemps(3601)
+        uMax = csvReader.uniteTemps(tMax)
         tMin = csvReader.transfo(tMin)
         tMax = csvReader.transfo(tMax)
-        
+
         self.message(
             _(
                 """
