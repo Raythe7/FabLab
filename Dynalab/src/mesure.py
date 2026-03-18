@@ -152,11 +152,17 @@ def effect(self):
                 tMin += values[0] * val
                 tMax += values[1] * val
 
+        uMin = csvReader.uniteTemps(tMin)
+        uMax = csvReader.uniteTemps(tMax)
+        tMin = csvReader.transfo(tMin)
+        tMax = csvReader.transfo(tMax)
+
         self.message(
             _(
                 """
-                Le chemin va prendre entre {tMin:.2f} s et {tMax:.2f} s à être dessiné
+                Le chemin va prendre entre {tMin} {uMin} et {tMax} {uMax} à être dessiné
                 """
+            ).format(tMin=tMin,tMax=tMax,uMin=uMin,uMax=uMax)
             ).format(tMin=tMin,tMax=tMax)
         )
    
