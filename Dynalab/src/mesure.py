@@ -157,14 +157,23 @@ def effect(self):
         tMin = csvReader.transfo(tMin)
         tMax = csvReader.transfo(tMax)
 
-        self.message(
-            _(
-                """
-                Le chemin va prendre entre {tMin} {uMin} et {tMax} {uMax} à être dessiné
-                """
-            ).format(tMin=tMin,tMax=tMax,uMin=uMin,uMax=uMax)
-            ).format(tMin=tMin,tMax=tMax)
-        )
+        if(tMin != tMax):
+            self.message(
+                _(
+                    """
+                    Le chemin va prendre entre {tMin} {uMin} et {tMax} {uMax} à être dessiné
+                    """
+                ).format(tMin=tMin,tMax=tMax,uMin=uMin,uMax=uMax)
+                ).format(tMin=tMin,tMax=tMax)
+        else:
+            self.message(
+                _(
+                    """
+                    Le chemin va prendre envion {tMin} {uMin} à être dessiné
+                    """
+                ).format(tMin=tMin,uMin=uMin)
+                ).format(tMin=tMin)
+        
    
 if __name__ == "__main__":
     MeasureLength().run()
