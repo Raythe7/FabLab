@@ -96,7 +96,7 @@ class MeasureLength(dynalab.Ext):
             help="Scale Factor (Drawing:Real Length)",
         )
 
-def effect(self):
+    def effect(self):
         tMin,tMax = 0,0
         # get number of digits
         prec = int(self.options.precision)
@@ -152,13 +152,28 @@ def effect(self):
                 tMin += values[0] * val
                 tMax += values[1] * val
 
-        self.message(
-            _(
-                """
-                Le chemin va prendre entre {tMin:.2f} s et {tMax:.2f} s à être dessiné
-                """
-            ).format(tMin=tMin,tMax=tMax)
-        )
+        uMin = csvReader.uniteTemps(tMin)
+        uMax = csvReader.uniteTemps(tMax)
+        tMin = csvReader.transfo(tMin)
+        tMax = csvReader.transfo(tMax)
+
+        if(tMin != tMax and tMin != 0):
+            self.message(
+                _(
+                    """
+                    Le chemin va prendre entre {tMin} {uMin} et {tMax} {uMax} à être dessiné
+                    """
+                ).format(tMin=tMin,tMax=tMax,uMin=uMin,uMax=uMax)
+            )
+        else:
+            self.message(
+                _(
+                    """
+                    Le chemin va prendre envion {tMax} {uMax} à être dessiné
+                    """
+                ).format(tMax=tMax,uMax=uMax)
+            )
+        
    
 if __name__ == "__main__":
     MeasureLength().run()
