@@ -20,7 +20,9 @@
     </param>
     <param name="materials" type="optiongroup" appearance="combo" gui-text="Matériaux:">
         <option value="1">Bois</option>
-        <option value="2">PVC</option>
+        <option value="2">Carton/Papier</option>
+        <option value="3">Caoutchouc</option>
+        <option value="4">Textile</option>
     </param>
     <!-- ajouter les options pour savoir matériaux (et épaisseur?)-->
     <script>

@@ -96,69 +96,69 @@ class MeasureLength(dynalab.Ext):
             help="Scale Factor (Drawing:Real Length)",
         )
 
-def effect(self):
-        tMin,tMax = 0,0
-        # get number of digits
-        prec = int(self.options.precision)
-        scale = self.svg.viewport_to_unit(
-            "1" + self.svg.document_unit
-        )  # convert to document units
-        self.options.offset *= scale
-        factor = self.svg.unit_to_viewport(1, self.options.unit)
+    def effect(self):
+            tMin,tMax = 0,0
+            # get number of digits
+            prec = int(self.options.precision)
+            scale = self.svg.viewport_to_unit(
+                "1" + self.svg.document_unit
+            )  # convert to document units
+            self.options.offset *= scale
+            factor = self.svg.unit_to_viewport(1, self.options.unit)
 
-        paths = []
+            paths = []
 
-        for elem in self.svg.selection.values():
+            for elem in self.svg.selection.values():
 
-            elem_copy = elem.copy()
+                elem_copy = elem.copy()
 
-            if isinstance(elem, inkex.TextElement):
-                text_copy = elem.copy()
-                path = text_copy.to_path_element()
-                paths.append(path)
-        
-            elif isinstance(elem_copy, inkex.PathElement):
-                paths.append(elem_copy)
+                if isinstance(elem, inkex.TextElement):
+                    text_copy = elem.copy()
+                    path = text_copy.to_path_element()
+                    paths.append(path)
+            
+                elif isinstance(elem_copy, inkex.PathElement):
+                    paths.append(elem_copy)
 
-            else:
-                paths.append(elem_copy.to_path_element())
+                else:
+                    paths.append(elem_copy.to_path_element())
 
-        if not paths:
-            raise inkex.AbortExtension(_("Please select at least one object."))
-        
-        for node in paths:            
-            path: inkex.Path = node.path.transform(node.composed_transform())
-            if self.options.mtype == "length":
-                settings = LengthSettings(error=1e-8)
-                stotal = sum(
-                    command.length(settings=settings)
-                    for command in path.proxy_iterator()
-                    if command.letter not in "mM"
-                )
-                #self.group = node.getparent().add(TextElement())
-            elif self.options.mtype == "area":
-                csp = path.to_superpath()
-                stotal = abs(csparea(csp) * factor * self.options.scale)
-            else:
-                continue
-            # Format the length as string
-            val = round(stotal * factor * self.options.scale, prec)
-            if self.options.mtype == "area":
-                values = csvReader.readAreaCSV(self.options.materials)
-                tMin += values[0] * val
-                tMax += values[1] * val
-            else:
-                values = csvReader.readLengthCSV(self.options.materials)
-                tMin += values[0] * val
-                tMax += values[1] * val
+            if not paths:
+                raise inkex.AbortExtension(_("Please select at least one object."))
+            
+            for node in paths:            
+                path: inkex.Path = node.path.transform(node.composed_transform())
+                if self.options.mtype == "length":
+                    settings = LengthSettings(error=1e-8)
+                    stotal = sum(
+                        command.length(settings=settings)
+                        for command in path.proxy_iterator()
+                        if command.letter not in "mM"
+                    )
+                    #self.group = node.getparent().add(TextElement())
+                elif self.options.mtype == "area":
+                    csp = path.to_superpath()
+                    stotal = abs(csparea(csp) * factor * self.options.scale)
+                else:
+                    continue
+                # Format the length as string
+                val = round(stotal * factor * self.options.scale, prec)
+                if self.options.mtype == "area":
+                    values = csvReader.readAreaCSV(self.options.materials)
+                    tMin += values[0] * val
+                    tMax += values[1] * val
+                else:
+                    values = csvReader.readLengthCSV(self.options.materials)
+                    tMin += values[0] * val
+                    tMax += values[1] * val
 
-        self.message(
-            _(
-                """
-                Le chemin va prendre entre {tMin:.2f} s et {tMax:.2f} s à être dessiné
-                """
-            ).format(tMin=tMin,tMax=tMax)
-        )
+            self.message(
+                _(
+                    """
+                    Le chemin va prendre entre {tMin:.2f} s et {tMax:.2f} s à être dessiné
+                    """
+                ).format(tMin=tMin,tMax=tMax)
+            )
    
 if __name__ == "__main__":
     MeasureLength().run()
