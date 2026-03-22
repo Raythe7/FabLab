@@ -97,7 +97,7 @@ class MeasureLength(dynalab.Ext):
         )
 
     def effect(self):
-        tMin,tMax = 0,0
+        estimedTime = 0
         # get number of digits
         prec = int(self.options.precision)
         scale = self.svg.viewport_to_unit(
@@ -145,34 +145,21 @@ class MeasureLength(dynalab.Ext):
             val = round(stotal * factor * self.options.scale, prec)
             if self.options.mtype == "area":
                 values = csvReader.readAreaCSV(self.options.materials)
-                tMin += values[0] * val
-                tMax += values[1] * val
+                estimedTime += values * val
             else:
                 values = csvReader.readLengthCSV(self.options.materials)
-                tMin += values[0] * val
-                tMax += values[1] * val
+                estimedTime += values * val
 
-        uMin = csvReader.uniteTemps(tMin)
-        uMax = csvReader.uniteTemps(tMax)
-        tMin = csvReader.transfo(tMin)
-        tMax = csvReader.transfo(tMax)
+        unit = csvReader.uniteTemps(estimedTime)
 
-        if(tMin != tMax and tMin != 0):
-            self.message(
-                _(
-                    """
-                    Le chemin va prendre entre {tMin} {uMin} et {tMax} {uMax} à être dessiné
-                    """
-                ).format(tMin=tMin,tMax=tMax,uMin=uMin,uMax=uMax)
-            )
-        else:
-            self.message(
-                _(
-                    """
-                    Le chemin va prendre envion {tMax} {uMax} à être dessiné
-                    """
-                ).format(tMax=tMax,uMax=uMax)
-            )
+
+        self.message(
+            _(
+                """
+                Le chemin va prendre entre {estimedTime} {unit} à être dessiné
+                """
+            ).format(estimedTime=estimedTime,unit=unit)
+        )
         
    
 if __name__ == "__main__":
