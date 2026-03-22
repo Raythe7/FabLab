@@ -19,10 +19,14 @@
         <option translatable="no" value="cm">cm</option>
     </param>
     <param name="materials" type="optiongroup" appearance="combo" gui-text="Matériaux:">
-        <option value="1">Bois</option>
-        <option value="2">PVC</option>
+        <option value="1">Papier</option>
+        <option value="2">CP 5mm</option>
+        <option value="3">CP 10mm</option>
+        <option value="4">Caoutchouc</option>
+        <option value="5">Carton</option>
+        <option value="6">CP engrave</option>
+        <option value="7">Textile</option>
     </param>
-    <!-- ajouter les options pour savoir matériaux (et épaisseur?)-->
     <script>
         <command location="inx" interpreter="python">../src/mesure.py</command>
     </script>
