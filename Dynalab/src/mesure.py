@@ -153,8 +153,8 @@ class MeasureLength(dynalab.Ext):
         unit = csvReader.uniteTemps(estimedTime)
 
         #Calcul des arrondis et unite de temps
-        estimedTimeH = csvReader.transfo(estimedTime+5)
-        estimedTimeL = csvReader.transfo(estimedTime-5)
+        estimedTimeH = csvReader.transfo(estimedTime)
+        estimedTimeL = csvReader.transfo(estimedTimeH-10)
         unitH = csvReader.uniteTemps(estimedTimeH)
         unitL = csvReader.uniteTemps(estimedTimeL)
 
