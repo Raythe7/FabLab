@@ -1,0 +1,8 @@
+,Vitesse (mm/s),Contour (s/mm),Gravure (s/mm2)
+Papier,90,0.0111,0.1111
+CP 5mm,28,0.0357,0.3571
+CP 10mm,8,0.125,1.25
+Caoutchouc,100,0.01,0.1
+Carton,200,0.005,0.05
+CP engrave,300,0.0033,0.0333
+Textile,600,0.0017,0.0167

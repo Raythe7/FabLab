@@ -2,39 +2,31 @@
 import csv
 from pathlib import Path
 
-chemin = Path(__file__).parent / "mesureTemps.csv"
+chemin = Path(__file__).parent / "mesureTempsV2.csv"
 
-def getMinAire(tab,ligne):
-    return tab[ligne][1]
-
-def getMaxAire(tab,ligne):
-    return tab[ligne][2]
-
-def getMinLong(tab,ligne):
+def getTimeForAera(tab,ligne):
     return tab[ligne][3]
 
-def getMaxLong(tab,ligne):
-    return tab[ligne][4]
+def getTimeForLength(tab,ligne):
+    return tab[ligne][2]
 
 def readAreaCSV(type):
     with open(chemin,newline='') as f: #Ouverture du fichier CSV
         tableau=[]
-        file=csv.reader(f) #chargement des lignes du fichier csv
-        for ligne in file: #Pour chaque ligne...
-            #print(ligne, end='\n') #...affichage de la ligne dans la console ...
-            tableau.append(ligne) #...on ajoute la ligne dans la liste ...
+        file=csv.reader(f)
+        for ligne in file: 
+            tableau.append(ligne) 
 
-        return [float(getMinAire(tableau,type)),float(getMaxAire(tableau,type))]
+        return float(getTimeForAera(tableau,type))
     
 def readLengthCSV(type):
     with open(chemin,newline='') as f: #Ouverture du fichier CSV
         tableau=[]
-        file=csv.reader(f) #chargement des lignes du fichier csv
-        for ligne in file: #Pour chaque ligne...
-            #print(ligne, end='\n') #...affichage de la ligne dans la console ...
-            tableau.append(ligne) #...on ajoute la ligne dans la liste ...
+        file=csv.reader(f)
+        for ligne in file:
+            tableau.append(ligne)
 
-        return [float(getMinLong(tableau,type)),float(getMaxLong(tableau,type))]
+        return float(getTimeForLength(tableau,type))
 
 def arrondi(v): 
     if v % 10 < 5:
