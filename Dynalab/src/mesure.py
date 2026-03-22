@@ -151,15 +151,19 @@ class MeasureLength(dynalab.Ext):
                 estimedTime += values * val
 
         unit = csvReader.uniteTemps(estimedTime)
-        estimedTime = csvReader.arrondi(estimedTime)
 
+        #Calcul des arrondis et unite de temps
+        estimedTimeH = csvReader.transfo(estimedTime+5)
+        estimedTimeL = csvReader.transfo(estimedTime-5)
+        unitH = csvReader.uniteTemps(estimedTimeH)
+        unitL = csvReader.uniteTemps(estimedTimeL)
 
         self.message(
             _(
                 """
-                Le chemin va prendre environ {estimedTime} {unit} à être dessiné
+                Le chemin va prendre entre {estimedTimeL} {unitL} et {estimedTimeH} {unitH} à être dessiné
                 """
-            ).format(estimedTime=estimedTime,unit=unit)
+            ).format(estimedTimeH=estimedTimeH,estimedTimeL=estimedTimeL,unitL=unitL,unitH=unitH)
         )
         
    
