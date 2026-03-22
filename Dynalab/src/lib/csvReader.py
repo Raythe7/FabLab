@@ -17,7 +17,7 @@ def readAreaCSV(type):
         for ligne in file: 
             tableau.append(ligne) 
 
-        return float(getTimeForAera(tableau,ligne))
+        return float(getTimeForAera(tableau,type))
     
 def readLengthCSV(type):
     with open(chemin,newline='') as f: #Ouverture du fichier CSV
