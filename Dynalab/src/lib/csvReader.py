@@ -45,8 +45,9 @@ def formater_intervalle(secondes):
     elif t_max < 3600:
         low = int(t_min // 60)
         high = int((t_max + 59) // 60)
-        return "entre {0} s et {1} min".format(low, high)
+        return "entre {0} min et {1} min".format(low, high)
 
     else:
+        low = int(t_min / 360) / 10.0
         high = int(t_max / 360) / 10.0
-        return "entre {0} s et {1} h".format(low, high)
+        return "entre {0} h et {1} h".format(low, high)
