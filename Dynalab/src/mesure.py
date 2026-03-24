@@ -98,6 +98,7 @@ class MeasureLength(dynalab.Ext):
 
     def effect(self):
         estimedTime = 0
+        taille = 0
         # get number of digits
         prec = int(self.options.precision)
         scale = self.svg.viewport_to_unit(
@@ -143,28 +144,33 @@ class MeasureLength(dynalab.Ext):
                 continue
             # Format the length as string
             val = round(stotal * factor * self.options.scale, prec)
-            if self.options.mtype == "area":
-                values = csvReader.readAreaCSV(self.options.materials)
-                estimedTime += values * val
-            else:
-                values = csvReader.readLengthCSV(self.options.materials)
-                estimedTime += values * val
+            taille += val
 
-        unit = csvReader.uniteTemps(estimedTime)
+        if self.options.mtype == "area":
+            values = csvReader.readAreaCSV(self.options.materials)
+            estimedTime = taille * values
+        else:
+            values = csvReader.readLengthCSV(self.options.materials)
+            estimedTime = taille * values
 
-        #Calcul des arrondis et unite de temps
-        estimedTimeH = csvReader.transfo(estimedTime)
-        estimedTimeL = csvReader.transfo(estimedTimeH-10)
-        unitH = csvReader.uniteTemps(estimedTimeH)
-        unitL = csvReader.uniteTemps(estimedTimeL)
+
+        #Calcul de l'intervalle
+        interval = csvReader.formater_intervalle(estimedTime);
 
         self.message(
             _(
                 """
-                Le chemin va prendre entre {estimedTimeL} {unitL} et {estimedTimeH} {unitH} à être dessiné
+                Le chemin va prendre environ {interval} à être dessiné
                 """
-            ).format(estimedTimeH=estimedTimeH,estimedTimeL=estimedTimeL,unitL=unitL,unitH=unitH)
+            ).format(interval=interval)
         )
+        # self.message(
+        #     _(
+        #         """
+        #         {taille} {estimedTime} {estimedTimeH} {unitH}
+        #         """
+        #     ).format(taille=taille,estimedTime=estimedTime,estimedTimeH=estimedTimeH,unitH=unitH)
+        # )
         
    
 if __name__ == "__main__":

@@ -27,25 +27,26 @@ def readLengthCSV(type):
             tableau.append(ligne)
 
         return float(getTimeForLength(tableau,type))
-
-def arrondi(v): 
-    if v % 10 < 5:
-        return (v//10)*10 #dizaine inf
-    else:
-        return ((v + 5)//10)*10 #dizaine sup
-
-def transfo(v):
-    if v < 60:
-        return arrondi(v)
-    elif(v >= 60 and v <= 3600):
-        return arrondi(v//60)
-    else:
-        return v//3600
     
-def uniteTemps(v):
-    if v < 60:
-        return "s"
-    elif(v >= 60 and v <= 3600):
-        return "m"
+
+def arrondi_sup_dizaine(v):
+    """Arrondi à la dizaine supérieure : 12 -> 20, 20 -> 20, 21 -> 30"""
+    return int((v + 9) // 10) * 10
+
+def formater_intervalle(secondes):
+    t_min = secondes
+    t_max = secondes * 1.2
+
+    if t_max < 60:
+        low = arrondi_sup_dizaine(t_min - 10) if t_min > 10 else 0
+        high = arrondi_sup_dizaine(t_max)
+        return "entre {0} s et {1} s".format(low, high)
+
+    elif t_max < 3600:
+        low = int(t_min // 60)
+        high = int((t_max + 59) // 60)
+        return "entre {0} s et {1} min".format(low, high)
+
     else:
-        return "h"
+        high = int(t_max / 360) / 10.0
+        return "entre {0} s et {1} h".format(low, high)
