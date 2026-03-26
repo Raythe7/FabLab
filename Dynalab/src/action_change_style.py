@@ -4,6 +4,8 @@ from gettext import gettext as _
 
 import inkex
 
+from diagnostic_circles_overlap import MarkCircleOverlaps
+
 from lib import dynalab, utils
 
 
@@ -90,6 +92,17 @@ class ChangeStyle(dynalab.Ext):
                 self.message(
                     "\t-", f"object with id={elem.get_id()} modified with style:", ", ".join(msg_style), verbosity=2
                 )
+                
+        run_fill_diagnostic = self.options.stroke == "FILL_MODE"
+
+        if run_fill_diagnostic:
+            self.message(_("running circle/ellipse overlap diagnostic..."), verbosity=1)
+
+            inst = MarkCircleOverlaps()
+            inst.options = self.options
+            inst.document = self.document
+            inst.svg = self.svg
+            inst.effect(clean=False)
 
         self.message(f"the style of {counter} objects was modified", verbosity=1)
         self.message(

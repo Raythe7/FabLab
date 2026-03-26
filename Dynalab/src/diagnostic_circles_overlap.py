@@ -10,9 +10,13 @@ from lib.dynalab import WARNING
 
 # Test if two bounding boxes overlap
 def bbox_overlap(a, b):
-    ax1, ay1, ax2, ay2 = a
-    bx1, by1, bx2, by2 = b
-    overlap = not (ax2 < bx1 or bx2 < ax1 or ay2 < by1 or by2 < ay1)
+    overlap = not (
+        a.right < b.left
+        or b.right < a.left
+        or a.bottom < b.top
+        or b.bottom < a.top
+    )
+
     return overlap
 
 
@@ -29,7 +33,14 @@ def ellipse_polygon(cx, cy, rx, ry, n=48):
 def polygon_bbox(poly):
     xs = [p[0] for p in poly]
     ys = [p[1] for p in poly]
-    bbox = (min(xs), min(ys), max(xs), max(ys))
+
+    xmin = min(xs)
+    ymin = min(ys)
+    xmax = max(xs)
+    ymax = max(ys)
+
+    bbox = inkex.BoundingBox.new_xywh(xmin, ymin, xmax - xmin, ymax - ymin)
+
     return bbox
 
 
@@ -131,8 +142,6 @@ class MarkCircleOverlaps(dynalab.Ext):
 
     def add_arguments(self, pars):
         super().add_arguments(pars)
-        pars.add_argument("--n", type=int, default=48, help="number of points to approximate ellipses")
-        pars.add_argument("--eps", type=float, default=1e-6, help="tolerance in SVG units")
 
     # Build a table containing transformed shapes
     def build_transformed_shapes(self, npts):
@@ -157,23 +166,18 @@ class MarkCircleOverlaps(dynalab.Ext):
         return data
 
     # Mark the two objects involved in an overlap
-    def mark_overlap(self, elem1, elem2, id1, id2, message_text, artifacts_ready):
-        if not artifacts_ready:
-            self.init_artifact_layer()
-            artifacts_ready = True
-
+    def mark_overlap(self, bb1, bb2, id1, id2, message_text):
         msg = _(message_text).format(id1=id1, id2=id2)
-        self.outline_bounding_box(WARNING, elem1, msg=msg)
-        self.outline_bounding_box(WARNING, elem2, msg=msg)
-
-        return artifacts_ready
+        self.outline_bounding_box(WARNING, None, bb=bb1, msg=msg)
+        self.outline_bounding_box(WARNING, None, bb=bb2, msg=msg)
 
     def effect(self, clean=True):
         self.message(self.name, verbosity=3)
+        self.init_artifact_layer()
 
-        artifacts_ready = False
-        eps = float(self.options.eps)
-        npts = int(self.options.n)
+
+        eps = 1e-6
+        npts = 48
 
         data = self.build_transformed_shapes(npts)
 
@@ -184,14 +188,12 @@ class MarkCircleOverlaps(dynalab.Ext):
 
         for i in range(m):
             s1 = data[i]
-            e1 = s1["elem"]
             id1 = s1["id"]
             bb1 = s1["bbox"]
             p1 = s1["poly"]
 
             for j in range(i + 1, m):
                 s2 = data[j]
-                e2 = s2["elem"]
                 id2 = s2["id"]
                 bb2 = s2["bbox"]
                 p2 = s2["poly"]
@@ -220,28 +222,26 @@ class MarkCircleOverlaps(dynalab.Ext):
 
                 if inter >= 2:
                     found += 1
-                    artifacts_ready = self.mark_overlap(
-                        e1,
-                        e2,
+                    self.mark_overlap(
+                        bb1,
+                        bb2,
                         id1,
                         id2,
                         "Ellipse overlap detected: {id1} and {id2}",
-                        artifacts_ready,
                     )
                     continue
 
                 if point_in_polygon(p1[0], p2) or point_in_polygon(p2[0], p1):
                     found += 1
-                    artifacts_ready = self.mark_overlap(
-                        e1,
-                        e2,
+                    self.mark_overlap(
+                        bb1,
+                        bb2,
                         id1,
                         id2,
-                        "Ellipse containment overlap detected: {id1} and {id2}",
-                        artifacts_ready,
+                        "Ellipse overlap detected: {id1} and {id2}",
                     )
 
-        if clean and artifacts_ready:
+        if clean:
             self.clean_artifacts(force=False)
 
         self.message(_("Overlapping ellipse pairs found: {n}").format(n=found), verbosity=1)
