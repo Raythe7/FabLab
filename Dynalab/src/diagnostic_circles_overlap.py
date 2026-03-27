@@ -4,8 +4,11 @@ import math
 
 import inkex
 
+import threading
+
 from lib import dynalab
 from lib.dynalab import WARNING
+
 
 
 # Test if two bounding boxes overlap
@@ -133,6 +136,76 @@ def transformed_shape_polygon(elem, npts):
 
     return poly
 
+def analyse(threadData,stopSignal):
+    
+    data = threadData['d']
+    m = threadData['m']
+    self = threadData['s']
+    clean = threadData['clean']
+    eps = threadData['eps']
+    
+    for i in range(m):
+        
+        if stopSignal.is_set():
+                return
+            
+        s1 = data[i]
+        id1 = s1["id"]
+        bb1 = s1["bbox"]
+        p1 = s1["poly"]
+
+        for j in range(i + 1, m):
+            s2 = data[j]
+            id2 = s2["id"]
+            bb2 = s2["bbox"]
+            p2 = s2["poly"]
+
+            if not bbox_overlap(bb1, bb2):
+                continue
+
+            inter = 0
+
+            for a in range(len(p1)):
+                a1 = p1[a]
+                a2 = p1[(a + 1) % len(p1)]
+
+                for b in range(len(p2)):
+                    b1 = p2[b]
+                    b2 = p2[(b + 1) % len(p2)]
+
+                    if segments_intersect(a1, a2, b1, b2, eps):
+                        inter += 1
+
+                        if inter >= 2:
+                            break
+
+                if inter >= 2:
+                    break
+
+            if inter >= 2:
+                threadData['found'] += 1
+                self.mark_overlap(
+                        bb1,
+                        bb2,
+                        id1,
+                        id2,
+                        "Ellipse overlap detected: {id1} and {id2}",
+                )
+                continue
+
+            if point_in_polygon(p1[0], p2) or point_in_polygon(p2[0], p1):
+                threadData['found'] += 1
+                self.mark_overlap(
+                        bb1,
+                        bb2,
+                        id1,
+                        id2,
+                        "Ellipse overlap detected: {id1} and {id2}",
+                )
+
+    if clean:
+        self.clean_artifacts(force=False)
+
 
 class MarkCircleOverlaps(dynalab.Ext):
     """
@@ -142,6 +215,9 @@ class MarkCircleOverlaps(dynalab.Ext):
 
     def add_arguments(self, pars):
         super().add_arguments(pars)
+        pars.add_argument(
+            "--duration", dest="duration", type=int, default=60, help="duration before timeout"
+        )
 
     # Build a table containing transformed shapes
     def build_transformed_shapes(self, npts):
@@ -185,66 +261,79 @@ class MarkCircleOverlaps(dynalab.Ext):
 
         found = 0
         m = len(data)
+        msg = ""
+        
+        threadData = {'s' : self,'m' : m,'d' : data ,'clean' : clean,'eps' : eps ,'found':found}
+        
+        stopSignal = threading.Event()
+        thread = threading.Thread(target=analyse,args = (threadData,stopSignal,))
+        thread.start()
+        thread.join(timeout=self.options.duration)
 
-        for i in range(m):
-            s1 = data[i]
-            id1 = s1["id"]
-            bb1 = s1["bbox"]
-            p1 = s1["poly"]
+        if thread.is_alive():
+            stopSignal.set()
+            msg = "Arrêt précoce par rapport au temps voulu"
+        
+        found = threadData['found']
+        # for i in range(m):
+        #     s1 = data[i]
+        #     id1 = s1["id"]
+        #     bb1 = s1["bbox"]
+        #     p1 = s1["poly"]
 
-            for j in range(i + 1, m):
-                s2 = data[j]
-                id2 = s2["id"]
-                bb2 = s2["bbox"]
-                p2 = s2["poly"]
+        #     for j in range(i + 1, m):
+        #         s2 = data[j]
+        #         id2 = s2["id"]
+        #         bb2 = s2["bbox"]
+        #         p2 = s2["poly"]
 
-                if not bbox_overlap(bb1, bb2):
-                    continue
+        #         if not bbox_overlap(bb1, bb2):
+        #             continue
 
-                inter = 0
+        #         inter = 0
 
-                for a in range(len(p1)):
-                    a1 = p1[a]
-                    a2 = p1[(a + 1) % len(p1)]
+        #         for a in range(len(p1)):
+        #             a1 = p1[a]
+        #             a2 = p1[(a + 1) % len(p1)]
 
-                    for b in range(len(p2)):
-                        b1 = p2[b]
-                        b2 = p2[(b + 1) % len(p2)]
+        #             for b in range(len(p2)):
+        #                 b1 = p2[b]
+        #                 b2 = p2[(b + 1) % len(p2)]
 
-                        if segments_intersect(a1, a2, b1, b2, eps):
-                            inter += 1
+        #                 if segments_intersect(a1, a2, b1, b2, eps):
+        #                     inter += 1
 
-                            if inter >= 2:
-                                break
+        #                     if inter >= 2:
+        #                         break
 
-                    if inter >= 2:
-                        break
+        #             if inter >= 2:
+        #                 break
 
-                if inter >= 2:
-                    found += 1
-                    self.mark_overlap(
-                        bb1,
-                        bb2,
-                        id1,
-                        id2,
-                        "Ellipse overlap detected: {id1} and {id2}",
-                    )
-                    continue
+        #         if inter >= 2:
+        #             found += 1
+        #             self.mark_overlap(
+        #                 bb1,
+        #                 bb2,
+        #                 id1,
+        #                 id2,
+        #                 "Ellipse overlap detected: {id1} and {id2}",
+        #             )
+        #             continue
 
-                if point_in_polygon(p1[0], p2) or point_in_polygon(p2[0], p1):
-                    found += 1
-                    self.mark_overlap(
-                        bb1,
-                        bb2,
-                        id1,
-                        id2,
-                        "Ellipse overlap detected: {id1} and {id2}",
-                    )
+        #         if point_in_polygon(p1[0], p2) or point_in_polygon(p2[0], p1):
+        #             found += 1
+        #             self.mark_overlap(
+        #                 bb1,
+        #                 bb2,
+        #                 id1,
+        #                 id2,
+        #                 "Ellipse overlap detected: {id1} and {id2}",
+        #             )
 
-        if clean:
-            self.clean_artifacts(force=False)
+        # if clean:
+        #     self.clean_artifacts(force=False)
 
-        self.message(_("Overlapping ellipse pairs found: {n}").format(n=found), verbosity=1)
+        self.message(_("Overlapping ellipse pairs found: {n}\n{msg}").format(n=found,msg=msg), verbosity=1)
 
 
 if __name__ == "__main__":
