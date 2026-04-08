@@ -13,11 +13,7 @@
     </effect>
     <name>5 - Détecter les superpositions de cercles</name>
 
-    <param name="duration" type="optiongroup" appearance="combo" gui-text="Durée avant arrêt(si analyse trop longue):">
-        <option value="60">1 min</option>
-        <option value="300">5 min</option>
-        <option value="600">10 min</option>
-    </param>
+    <param name="only-fill-mode-paths" type="bool" value="true" gui-text="restreindre aux objets de couleur 'gravure remplissage'"/>
 
     <script>
         <command location="inx" interpreter="python">../src/diagnostic_circles_overlap.py</command>
