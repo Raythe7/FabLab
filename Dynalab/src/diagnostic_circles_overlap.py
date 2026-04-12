@@ -33,6 +33,18 @@ def ellipse_polygon(cx, cy, rx, ry, n=48):
     return pts
 
 
+# Build the polygon of a rectangle
+def rectangle_polygon(x, y, w, h):
+    pts = [
+        (x, y),
+        (x + w, y),
+        (x + w, y + h),
+        (x, y + h),
+    ]
+
+    return pts
+
+
 # Return the bounding box of a polygon
 def polygon_bbox(poly):
     xs = [p[0] for p in poly]
@@ -93,7 +105,21 @@ def segments_intersect(a, b, c, d, eps):
     return intersect
 
 
-# Build the transformed polygon of a circle/ellipse
+# Return true if the object is one of the target objects
+def is_target_shape(elem):
+    target = isinstance(elem, (inkex.Circle, inkex.Ellipse))
+
+    return target
+
+
+# Return true if the object is one of the supported objects
+def is_supported_shape(elem):
+    supported = isinstance(elem, (inkex.Circle, inkex.Ellipse, inkex.Rectangle, inkex.PathElement))
+
+    return supported
+
+
+# Build the transformed polygon of a supported shape
 def transformed_shape_polygon(elem, npts):
     poly = None
 
@@ -110,6 +136,22 @@ def transformed_shape_polygon(elem, npts):
         ry = float(elem.get("ry", "0"))
         poly = ellipse_polygon(cx, cy, rx, ry, n=npts)
 
+    elif isinstance(elem, inkex.Rectangle):
+        x = float(elem.get("x", "0"))
+        y = float(elem.get("y", "0"))
+        w = float(elem.get("width", "0"))
+        h = float(elem.get("height", "0"))
+        poly = rectangle_polygon(x, y, w, h)
+
+    elif isinstance(elem, inkex.PathElement):
+        poly = []
+
+        for p in elem.path.end_points:
+            poly.append((p.x, p.y))
+
+        if len(poly) < 3:
+            poly = None
+
     if poly is not None:
         tr = elem.composed_transform()
         transformed = []
@@ -123,9 +165,9 @@ def transformed_shape_polygon(elem, npts):
     return poly
 
 
-class MarkCircleIntersections(dynalab.Ext):
+class MarkCircleOverlaps(dynalab.Ext):
     """
-    detect circle/ellipse intersections
+    detect intersections between circles/ellipses and other supported shapes
     """
 
     name = _("detect circle/ellipse intersections")
@@ -135,7 +177,7 @@ class MarkCircleIntersections(dynalab.Ext):
             "--only-fill-mode-paths",
             type=inkex.Boolean,
             default=True,
-            help="restrict to circles/ellipses with 'fill mode' color",
+            help="restrict to objects with 'fill mode' color",
             dest="only_fill_mode_paths",
         )
 
@@ -149,11 +191,11 @@ class MarkCircleIntersections(dynalab.Ext):
 
         data = []
         for elem in self.selected_or_all(skip_groups=True):
-            # skip non circle/ellipse elements
-            if not isinstance(elem, (inkex.Circle, inkex.Ellipse)):
+            # skip element not supported
+            if not is_supported_shape(elem):
                 continue
 
-            # skip objects that do not have the appropriate color
+            # skip objects not in fill mode
             if self.options.only_fill_mode_paths and elem.style.get("stroke") != fill_mode_color:
                 continue
 
@@ -169,10 +211,11 @@ class MarkCircleIntersections(dynalab.Ext):
                     "id": elem.get_id(),
                     "poly": poly,
                     "bbox": bb,
+                    "is_target": is_target_shape(elem),
                 }
             )
 
-        self.message(_("Ellipses found: {n}").format(n=len(data)), verbosity=1)
+        self.message(_("Supported shapes found: {n}").format(n=len(data)), verbosity=1)
 
         counter_pairs = 0
 
@@ -181,14 +224,20 @@ class MarkCircleIntersections(dynalab.Ext):
             id1 = s1["id"]
             bb1 = s1["bbox"]
             p1 = s1["poly"]
+            is_target_1 = s1["is_target"]
 
             for j in range(i + 1, len(data)):
                 s2 = data[j]
                 id2 = s2["id"]
                 bb2 = s2["bbox"]
                 p2 = s2["poly"]
+                is_target_2 = s2["is_target"]
 
-                # skip pairs whose bounding boxes do not overlap
+                # keep only pairs where one object is a circle/ellipse
+                if not (is_target_1 or is_target_2):
+                    continue
+
+                # skip pairs where the bounding boxes dont overlap
                 if not bbox_overlap(bb1, bb2):
                     continue
 
@@ -241,4 +290,4 @@ class MarkCircleIntersections(dynalab.Ext):
 
 
 if __name__ == "__main__":
-    MarkCircleIntersections().run()
+    MarkCircleOverlaps().run()
