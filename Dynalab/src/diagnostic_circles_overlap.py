@@ -164,6 +164,117 @@ def transformed_shape_polygon(elem, npts):
 
     return poly
 
+def functionForThread(self,clean,stopSignal):
+    self.message(self.name, verbosity=3)
+    self.init_artifact_layer()
+
+    eps = 1e-6
+    npts = 48
+    fill_mode_color = self.config["laser_mode_fill_color"]
+
+    data = []
+    for elem in self.selected_or_all(skip_groups=True):
+        # skip element not supported
+        if not is_supported_shape(elem):
+            continue
+
+        # skip objects not in fill mode
+        if self.options.only_fill_mode_paths and elem.style.get("stroke") != fill_mode_color:
+            continue
+
+        poly = transformed_shape_polygon(elem, npts)
+        if poly is None:
+            continue
+
+        bb = polygon_bbox(poly)
+
+        data.append(
+            {
+                "elem": elem,
+                "id": elem.get_id(),
+                "poly": poly,
+                "bbox": bb,
+                "is_target": is_target_shape(elem),
+            }
+        )
+
+    self.message(_("Supported shapes found: {n}").format(n=len(data)), verbosity=1)
+
+    counter_pairs = 0
+
+    for i in range(len(data)):
+        
+        if stopSignal.is_set():
+                return
+
+        s1 = data[i]
+        id1 = s1["id"]
+        bb1 = s1["bbox"]
+        p1 = s1["poly"]
+        is_target_1 = s1["is_target"]
+
+        for j in range(i + 1, len(data)):
+            s2 = data[j]
+            id2 = s2["id"]
+            bb2 = s2["bbox"]
+            p2 = s2["poly"]
+            is_target_2 = s2["is_target"]
+
+            # keep only pairs where one object is a circle/ellipse
+            if not (is_target_1 or is_target_2):
+                continue
+
+            # skip pairs where the bounding boxes dont overlap
+            if not bbox_overlap(bb1, bb2):
+                continue
+
+            inter = 0
+            for a in range(len(p1)):
+                a1 = p1[a]
+                a2 = p1[(a + 1) % len(p1)]
+
+                for b in range(len(p2)):
+                    b1 = p2[b]
+                    b2 = p2[(b + 1) % len(p2)]
+
+                    if segments_intersect(a1, a2, b1, b2, eps):
+                        inter += 1
+                        if inter >= 2:
+                            break
+
+                if inter >= 2:
+                    break
+
+            if inter >= 2:
+                desc = _("object with id={id1} intersects object with id={id2}").format(
+                    id1=id1,
+                    id2=id2,
+                )
+                counter_pairs += 1
+                self.message("\t-", desc, verbosity=2)
+                self.outline_bounding_box(WARNING, None, bb=bb1, msg=desc)
+                self.outline_bounding_box(WARNING, None, bb=bb2, msg=desc)
+
+    if clean:
+        self.clean_artifacts(force=False)
+
+    self.message(
+        ngettext(
+            "{counter} intersecting pair found",
+            "{counter} intersecting pairs found",
+            counter_pairs,
+        ).format(counter=counter_pairs),
+        verbosity=1,
+    )
+    self.message(
+        _("{extension:s}: running time = {time:.0f}ms").format(
+            extension=self.name,
+            time=self.get_timer(),
+        ),
+        verbosity=3,
+    )
+    self.message("", verbosity=1)
+    
 
 class MarkCircleOverlaps(dynalab.Ext):
     """
@@ -182,111 +293,121 @@ class MarkCircleOverlaps(dynalab.Ext):
         )
 
     def effect(self, clean=True):
-        self.message(self.name, verbosity=3)
-        self.init_artifact_layer()
+        #LA FONCTION A EXECUTER AVEC UN THREAD DE DYNALAB.py
+        timeout_seconds = 1
+        
+        # On appelle la méthode de threading de dynalab
+        # Note : On passe 'clean' comme argument supplémentaire
+        success = self.run_task_with_timeout(functionForThread, timeout_seconds, clean)
+        
+        if not success:
+            self.message(_("L'analyse a été interrompue."), verbosity=1)
+        
+        # self.message(self.name, verbosity=3)
+        # self.init_artifact_layer()
 
-        eps = 1e-6
-        npts = 48
-        fill_mode_color = self.config["laser_mode_fill_color"]
+        # eps = 1e-6
+        # npts = 48
+        # fill_mode_color = self.config["laser_mode_fill_color"]
 
-        data = []
-        for elem in self.selected_or_all(skip_groups=True):
-            # skip element not supported
-            if not is_supported_shape(elem):
-                continue
+        # data = []
+        # for elem in self.selected_or_all(skip_groups=True):
+        #     # skip element not supported
+        #     if not is_supported_shape(elem):
+        #         continue
 
-            # skip objects not in fill mode
-            if self.options.only_fill_mode_paths and elem.style.get("stroke") != fill_mode_color:
-                continue
+        #     # skip objects not in fill mode
+        #     if self.options.only_fill_mode_paths and elem.style.get("stroke") != fill_mode_color:
+        #         continue
 
-            poly = transformed_shape_polygon(elem, npts)
-            if poly is None:
-                continue
+        #     poly = transformed_shape_polygon(elem, npts)
+        #     if poly is None:
+        #         continue
 
-            bb = polygon_bbox(poly)
+        #     bb = polygon_bbox(poly)
 
-            data.append(
-                {
-                    "elem": elem,
-                    "id": elem.get_id(),
-                    "poly": poly,
-                    "bbox": bb,
-                    "is_target": is_target_shape(elem),
-                }
-            )
+        #     data.append(
+        #         {
+        #             "elem": elem,
+        #             "id": elem.get_id(),
+        #             "poly": poly,
+        #             "bbox": bb,
+        #             "is_target": is_target_shape(elem),
+        #         }
+        #     )
 
-        self.message(_("Supported shapes found: {n}").format(n=len(data)), verbosity=1)
+        # self.message(_("Supported shapes found: {n}").format(n=len(data)), verbosity=1)
 
-        counter_pairs = 0
+        # counter_pairs = 0
 
-        for i in range(len(data)):
-            s1 = data[i]
-            id1 = s1["id"]
-            bb1 = s1["bbox"]
-            p1 = s1["poly"]
-            is_target_1 = s1["is_target"]
+        # for i in range(len(data)):
+        #     s1 = data[i]
+        #     id1 = s1["id"]
+        #     bb1 = s1["bbox"]
+        #     p1 = s1["poly"]
+        #     is_target_1 = s1["is_target"]
 
-            for j in range(i + 1, len(data)):
-                s2 = data[j]
-                id2 = s2["id"]
-                bb2 = s2["bbox"]
-                p2 = s2["poly"]
-                is_target_2 = s2["is_target"]
+        #     for j in range(i + 1, len(data)):
+        #         s2 = data[j]
+        #         id2 = s2["id"]
+        #         bb2 = s2["bbox"]
+        #         p2 = s2["poly"]
+        #         is_target_2 = s2["is_target"]
 
-                # keep only pairs where one object is a circle/ellipse
-                if not (is_target_1 or is_target_2):
-                    continue
+        #         # keep only pairs where one object is a circle/ellipse
+        #         if not (is_target_1 or is_target_2):
+        #             continue
 
-                # skip pairs where the bounding boxes dont overlap
-                if not bbox_overlap(bb1, bb2):
-                    continue
+        #         # skip pairs where the bounding boxes dont overlap
+        #         if not bbox_overlap(bb1, bb2):
+        #             continue
 
-                inter = 0
-                for a in range(len(p1)):
-                    a1 = p1[a]
-                    a2 = p1[(a + 1) % len(p1)]
+        #         inter = 0
+        #         for a in range(len(p1)):
+        #             a1 = p1[a]
+        #             a2 = p1[(a + 1) % len(p1)]
 
-                    for b in range(len(p2)):
-                        b1 = p2[b]
-                        b2 = p2[(b + 1) % len(p2)]
+        #             for b in range(len(p2)):
+        #                 b1 = p2[b]
+        #                 b2 = p2[(b + 1) % len(p2)]
 
-                        if segments_intersect(a1, a2, b1, b2, eps):
-                            inter += 1
-                            if inter >= 2:
-                                break
+        #                 if segments_intersect(a1, a2, b1, b2, eps):
+        #                     inter += 1
+        #                     if inter >= 2:
+        #                         break
 
-                    if inter >= 2:
-                        break
+        #             if inter >= 2:
+        #                 break
 
-                if inter >= 2:
-                    desc = _("object with id={id1} intersects object with id={id2}").format(
-                        id1=id1,
-                        id2=id2,
-                    )
-                    counter_pairs += 1
-                    self.message("\t-", desc, verbosity=2)
-                    self.outline_bounding_box(WARNING, None, bb=bb1, msg=desc)
-                    self.outline_bounding_box(WARNING, None, bb=bb2, msg=desc)
+        #         if inter >= 2:
+        #             desc = _("object with id={id1} intersects object with id={id2}").format(
+        #                 id1=id1,
+        #                 id2=id2,
+        #             )
+        #             counter_pairs += 1
+        #             self.message("\t-", desc, verbosity=2)
+        #             self.outline_bounding_box(WARNING, None, bb=bb1, msg=desc)
+        #             self.outline_bounding_box(WARNING, None, bb=bb2, msg=desc)
 
-        if clean:
-            self.clean_artifacts(force=False)
+        # if clean:
+        #     self.clean_artifacts(force=False)
 
-        self.message(
-            ngettext(
-                "{counter} intersecting pair found",
-                "{counter} intersecting pairs found",
-                counter_pairs,
-            ).format(counter=counter_pairs),
-            verbosity=1,
-        )
-        self.message(
-            _("{extension:s}: running time = {time:.0f}ms").format(
-                extension=self.name,
-                time=self.get_timer(),
-            ),
-            verbosity=3,
-        )
-        self.message("", verbosity=1)
+        # self.message(
+        #     ngettext(
+        #         "{counter} intersecting pair found",
+        #         "{counter} intersecting pairs found",
+        #         counter_pairs,
+        #     ).format(counter=counter_pairs),
+        #     verbosity=1,
+        # )
+        # self.message(
+        #     _("{extension:s}: running time = {time:.0f}ms").format(
+        #         extension=self.name,
+        #         time=self.get_timer(),
+        #     ),
+        #     verbosity=3,
+        # )
+        # self.message("", verbosity=1)
 
 
 if __name__ == "__main__":
