@@ -6,6 +6,7 @@ from gettext import ngettext
 from tempfile import TemporaryDirectory
 
 import inkex
+import threading
 from inkex.paths import Line, Move
 
 from lib import config, i18n, utils
@@ -567,6 +568,31 @@ class Ext(inkex.EffectExtension, config.Ext, i18n.Ext):
         )
         marker.append(arrow)
         self.svg.defs.append(marker)
+        
+    def run_task_with_timeout(self, task_func, timeout, *args):
+        """
+        Exécute task_func dans un thread avec un timeout.
+        Le thread s'arrêtera lorsque son temps d'éxécution serait trop long
+        """
+        stop_signal = threading.Event()
+        
+        # On prépare les arguments : (self, *args, stop_signal)
+        thread_args = (self,) + args + (stop_signal,)
+        
+        task_thread = threading.Thread(target=task_func, args=thread_args)
+        task_thread.start()
+
+        # On attend le thread pendant 'timeout' secondes
+        task_thread.join(timeout)
+
+        if task_thread.is_alive():
+            # Si le thread tourne encore, on active le signal d'arrêt
+            stop_signal.set()
+            # On laisse un court instant pour que le thread s'arrête proprement
+            task_thread.join() 
+            return False
+        
+        return True
 
 
 # vim: textwidth=120 foldmethod=indent foldlevel=0
