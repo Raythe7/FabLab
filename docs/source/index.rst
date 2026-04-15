@@ -1,17 +1,16 @@
-Welcome to Lumache's documentation!
-===================================
+Bienvenue dans la documentation de Dynalab !
+============================================
+**DynalabExt**
+DynalabExt est une extension Inkscape personnalisée, encore à l'état de projet, 
+destinée à être utilisée au Dynalab Fablab, 
+à Chambéry, en France.
 
-**Lumache** (/lu'make/) is a Python library for cooks and food lovers
-that creates recipes mixing random ingredients.
-It pulls data from the `Open Food Facts database <https://world.openfoodfacts.org/>`_
-and offers a *simple* and *intuitive* API.
-
-Check out the :doc:`usage` section for further information, including
-how to :ref:`installation` the project.
+Consultez la section `installation` de la documentation pour plus d'informations 
+sur la procédure d'installation du projet.
 
 .. note::
 
-   This project is under active development.
+   Ce projet est en développement actif.
 
 Contents
 --------
