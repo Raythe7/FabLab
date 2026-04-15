@@ -1,4 +1,4 @@
-Usage
+Temps d'usinage d'un dessin
 =====
 
 .. _installation:
@@ -6,11 +6,7 @@ Usage
 Installation
 ------------
 
-To use Lumache, first install it using pip:
-
-.. code-block:: console
-
-   (.venv) $ pip install lumache
+test voir si ça marche
 
 Creating recipes
 ----------------
