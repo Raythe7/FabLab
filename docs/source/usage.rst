@@ -12,9 +12,8 @@ Installation du fichier de l'extention
 ----------------
 Une fois sur la page GitHub, appuyez sur le bouton vert "Code".
 
-.. image:: /image_tuto/Code_vert.png
-   :alt: Texte alternatif pour l'image
-   :width: 400px
+.. image:: image_tuto/code_vert.png
+   :alt: Mon code vert
    :align: center
 
 Cliquez ensuite sur ``"Download ZIP"`` pour télécharger l'archive.
