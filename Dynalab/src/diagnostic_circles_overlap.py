@@ -291,10 +291,14 @@ class MarkCircleOverlaps(dynalab.Ext):
             help="restrict to objects with 'fill mode' color",
             dest="only_fill_mode_paths",
         )
+    
+        pars.add_argument(
+            "--duration", dest="duration", type=int, default=10, help="Duration before timeout"
+        )
 
     def effect(self, clean=True):
         #LA FONCTION A EXECUTER AVEC UN THREAD DE DYNALAB.py
-        timeout_seconds = 1
+        timeout_seconds = self.options.duration
         
         # On appelle la méthode de threading de dynalab
         # Note : On passe 'clean' comme argument supplémentaire

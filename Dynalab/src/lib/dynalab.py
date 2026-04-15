@@ -582,14 +582,11 @@ class Ext(inkex.EffectExtension, config.Ext, i18n.Ext):
         task_thread = threading.Thread(target=task_func, args=thread_args)
         task_thread.start()
 
-        # On attend le thread pendant 'timeout' secondes
         task_thread.join(timeout)
 
         if task_thread.is_alive():
-            # Si le thread tourne encore, on active le signal d'arrêt
             stop_signal.set()
-            # On laisse un court instant pour que le thread s'arrête proprement
-            task_thread.join() 
+            task_thread.join(1) 
             return False
         
         return True
