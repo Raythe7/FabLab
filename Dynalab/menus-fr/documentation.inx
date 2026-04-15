@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<inkscape-extension xmlns="http://www.inkscape.org/namespace/inkscape/extension">
+    <id>dynalab.documentation.link</id>
+    <name>1 - Lien de la Documentation</name>
+
+    <label>Cliquez sur le lien ci-dessous pour ouvrir l'aide :</label>
+    <param name="url" type="description" appearance="url">https://fablab.readthedocs.io/fr/main</param>
+
+    <effect needs-live-preview="false">
+        <object-type>all</object-type>
+        <effects-menu>
+            <submenu name=" Dynalab">
+                <submenu name="6 - Aide et Documentation"/>
+            </submenu>
+        </effects-menu>
+    </effect>
+    
+    <gui-description xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape">
+        Ce lien ouvre la documentation externe.
+    </gui-description>
+    <script>
+        <command location="inx" interpreter="python">../src/action_change_style.py</command>
+    </script>
+</inkscape-extension>
