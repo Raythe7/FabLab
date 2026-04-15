@@ -10,30 +10,41 @@ Pour commencer rendez vous sur ce lien github : https://github.com/Raythe7/FabLa
 
 Installation du fichier de l'extention
 ----------------
-Une fois sur la page github appuier sur le bouton vert "code"
+Une fois sur la page GitHub, appuyez sur le bouton vert "Code".
 
-Et puis sur Télécharger le dossier zip 
+.. image:: image_tuto/Code_vert.png
+   :alt: Mon code vert
 
-Une fois ce dossier installer faire le raccourcis Windows + R
+Cliquez ensuite sur ``"Download ZIP"`` pour télécharger l'archive.
 
-Une fenêtres à l'intérieur et rentrer " %appdata% "
+.. image:: image_tuto/ZIP.png
+   :alt: ZIP
 
-cele vous ouvre l'explorateur de fichier 
+Une fois le fichier téléchargé, utilisez le raccourci ``Windows + R`` sur votre clavier.
 
-To retrieve a list of random ingredients,
-you can use the ``lumache.get_random_ingredients()`` function:
+Dans la fenêtre qui s'ouvre, tapez ``%appdata%`` et validez par Entrée.
 
-.. autofunction:: lumache.get_random_ingredientsS
+.. image:: image_tuto/appdata.png
+   :alt: appdata
 
-The ``kind`` parameter should be either ``"meat"``, ``"fish"``,
-or ``"veggies"``. Otherwise, :py:func:`lumache.get_random_ingredients`
-will raise an exception.
+L'explorateur de fichiers s'ouvre : ouvrer le dossier ``Romaing`` et cherchez puis ouvrez le dossier nommé ``Inkscape``.
 
-.. autoexception:: lumache.InvalidKindError
+.. image:: image_tuto/Roaming.png
+   :alt: Roaming
 
-For example:
+À l'intérieur, localisez le dossier ``"extensions"``.
 
->>> import lumache
->>> lumache.get_random_ingredients()
-['shells', 'gorgonzola', 'parsley']
+Déplacez le fichier ZIP téléchargé dans ce dossier extensions.
+
+Une fois déplacer faites un clic droit sur le fichier ZIP et choisissez ``"Extraire ici"`` (ou ``"Extraire tout"``) pour le décompresser.
+
+.. image:: image_tuto/extract.png
+   :alt: extract
+
+Une fois les fichiers extraits, vous pouvez lancer le logiciel Inkscape pour profiter de votre nouvelle extension.
+
+.. image:: image_tuto/extention.png
+   :alt: extention
+
+
 
