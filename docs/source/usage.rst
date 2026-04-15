@@ -18,9 +18,9 @@ Une fois sur la page GitHub, appuyez sur le bouton vert "Code".
 
 Cliquez ensuite sur ``"Download ZIP"`` pour télécharger l'archive.
 
-Une fois le fichier téléchargé, utilisez le raccourci`` Windows + R`` sur votre clavier.
+Une fois le fichier téléchargé, utilisez le raccourci ``Windows + R`` sur votre clavier.
 
-Dans la fenêtre qui s'ouvre, tapez %appdata% et validez par Entrée.
+Dans la fenêtre qui s'ouvre, tapez ``%appdata%`` et validez par Entrée.
 
 L'explorateur de fichiers s'ouvre : ouvrer le dossier ``Romaing`` et cherchez puis ouvrez le dossier nommé ``Inkscape``.
 
