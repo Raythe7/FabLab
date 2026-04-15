@@ -17,36 +17,21 @@ Une fois sur la page GitHub, appuyez sur le bouton vert "Code".
    :width: 400px
    :align: center
 
-Cliquez ensuite sur "Download ZIP" pour télécharger l'archive.
+Cliquez ensuite sur ``"Download ZIP"`` pour télécharger l'archive.
 
-Une fois le fichier téléchargé, utilisez le raccourci Windows + R sur votre clavier.
+Une fois le fichier téléchargé, utilisez le raccourci`` Windows + R`` sur votre clavier.
 
 Dans la fenêtre qui s'ouvre, tapez %appdata% et validez par Entrée.
 
-L'explorateur de fichiers s'ouvre : ouvrer le dossier Romaing et cherchez puis ouvrez le dossier nommé Inkscape.
+L'explorateur de fichiers s'ouvre : ouvrer le dossier ``Romaing`` et cherchez puis ouvrez le dossier nommé ``Inkscape``.
 
-À l'intérieur, localisez le dossier "extensions".
+À l'intérieur, localisez le dossier ``"extensions"``.
 
 Déplacez le fichier ZIP téléchargé dans ce dossier extensions.
 
-Une fois déplacer faites un clic droit sur le fichier ZIP et choisissez "Extraire ici" (ou "Extraire tout") pour le décompresser.
+Une fois déplacer faites un clic droit sur le fichier ZIP et choisissez ``"Extraire ici"`` (ou ``"Extraire tout"``) pour le décompresser.
 
 Une fois les fichiers extraits, vous pouvez lancer le logiciel Inkscape pour profiter de votre nouvelle extension.
 
-To retrieve a list of random ingredients,
-you can use the ``lumache.get_random_ingredients()`` function:
 
-.. autofunction:: lumache.get_random_ingredientsS
-
-The ``kind`` parameter should be either ``"meat"``, ``"fish"``,
-or ``"veggies"``. Otherwise, :py:func:`lumache.get_random_ingredients`
-will raise an exception.
-
-.. autoexception:: lumache.InvalidKindError
-
-For example:
-
->>> import lumache
->>> lumache.get_random_ingredients()
-['shells', 'gorgonzola', 'parsley']
 
