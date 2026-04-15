@@ -10,15 +10,28 @@ Pour commencer rendez vous sur ce lien github : https://github.com/Raythe7/FabLa
 
 Installation du fichier de l'extention
 ----------------
-Une fois sur la page github appuier sur le bouton vert "code"
+Une fois sur la page GitHub, appuyez sur le bouton vert "Code".
 
-Et puis sur Télécharger le dossier zip 
+.. image:: /image_tuto/Code_vert.png
+   :alt: Texte alternatif pour l'image
+   :width: 400px
+   :align: center
 
-Une fois ce dossier installer faire le raccourcis Windows + R
+Cliquez ensuite sur "Download ZIP" pour télécharger l'archive.
 
-Une fenêtres à l'intérieur et rentrer " %appdata% "
+Une fois le fichier téléchargé, utilisez le raccourci Windows + R sur votre clavier.
 
-cele vous ouvre l'explorateur de fichier 
+Dans la fenêtre qui s'ouvre, tapez %appdata% et validez par Entrée.
+
+L'explorateur de fichiers s'ouvre : ouvrer le dossier Romaing et cherchez puis ouvrez le dossier nommé Inkscape.
+
+À l'intérieur, localisez le dossier "extensions".
+
+Déplacez le fichier ZIP téléchargé dans ce dossier extensions.
+
+Une fois déplacer faites un clic droit sur le fichier ZIP et choisissez "Extraire ici" (ou "Extraire tout") pour le décompresser.
+
+Une fois les fichiers extraits, vous pouvez lancer le logiciel Inkscape pour profiter de votre nouvelle extension.
 
 To retrieve a list of random ingredients,
 you can use the ``lumache.get_random_ingredients()`` function:
