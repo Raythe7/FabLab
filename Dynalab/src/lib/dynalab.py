@@ -602,7 +602,7 @@ class Ext(inkex.EffectExtension, config.Ext, i18n.Ext):
         
         return True
     
-    def run(self, args=None, output=output_unspecified):
+    def run(self, args=None, output=output_unspecified,timeout=None):
         # type: (Optional[List[str]], Union[str, IO]) -> None
         """Main entrypoint for any Inkscape Extension"""
         try:
@@ -610,6 +610,12 @@ class Ext(inkex.EffectExtension, config.Ext, i18n.Ext):
                 args = sys.argv[1:]
 
             self.parse_arguments(args)
+            self.stop_event = threading.Event()
+            if timeout != None:
+                self.use_thread = True
+            else:
+                self.use_thread = False
+                
             if self.options.input_file is None:
                 self.options.input_file = sys.stdin
             elif "DOCUMENT_PATH" not in os.environ:
@@ -635,7 +641,14 @@ class Ext(inkex.EffectExtension, config.Ext, i18n.Ext):
                 self.options.output = output
 
             self.load_raw()
-            self.save_raw(self.effect())
+            if self.use_thread:
+                t = threading.Thread(target=self.effect)
+                t.start()
+                t.join(timeout)
+                self.stop_event.set()
+                self.save_raw(None)
+            else:
+                self.save_raw(self.effect())
         except AbortExtension as err:
             errormsg(str(err))
             sys.exit(ABORT_STATUS)
