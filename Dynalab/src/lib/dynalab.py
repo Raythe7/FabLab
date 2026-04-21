@@ -5,9 +5,17 @@ from gettext import gettext as _
 from gettext import ngettext
 from tempfile import TemporaryDirectory
 
+import sys
+import os
+
+import io  # Manquant dans ton code
+
+
+
 import inkex
 import threading
 from inkex.paths import Line, Move
+from inkex.base import ABORT_STATUS        # Pour le code de sortie
 
 from lib import config, i18n, utils
 
@@ -28,6 +36,9 @@ ERROR = 3
 NOTE_COLOR = "#00ff00"  # green
 WARNING_COLOR = "#ffa500"  # orange
 ERROR_COLOR = "#ff0000"  # red
+
+# necessary to redefine run method
+output_unspecified = inkex.base.InkscapeExtension.output_unspecified
 
 
 # It might be better to use a white list of tags rather than a black list.
@@ -590,6 +601,46 @@ class Ext(inkex.EffectExtension, config.Ext, i18n.Ext):
             return False
         
         return True
+    
+    def run(self, args=None, output=output_unspecified):
+        # type: (Optional[List[str]], Union[str, IO]) -> None
+        """Main entrypoint for any Inkscape Extension"""
+        try:
+            if args is None:
+                args = sys.argv[1:]
+
+            self.parse_arguments(args)
+            if self.options.input_file is None:
+                self.options.input_file = sys.stdin
+            elif "DOCUMENT_PATH" not in os.environ:
+                os.environ["DOCUMENT_PATH"] = self.options.input_file
+
+            self.bin_stdout = None
+            if self.options.output is None:
+                # If no output was specified, attempt to extract a binary
+                # output from stdout, and if that doesn't seem possible,
+                # punt and try whatever stream stdout is:
+                if output is output_unspecified:
+                    output = sys.stdout
+                    if "b" not in getattr(output, "mode", "") and not isinstance(
+                        output, (io.RawIOBase, io.BufferedIOBase)
+                    ):
+                        if hasattr(output, "buffer"):
+                            output = output.buffer  # type: ignore
+                        elif hasattr(output, "fileno"):
+                            self.bin_stdout = os.fdopen(
+                                output.fileno(), "wb", closefd=False
+                            )
+                            output = self.bin_stdout
+                self.options.output = output
+
+            self.load_raw()
+            self.save_raw(self.effect())
+        except AbortExtension as err:
+            errormsg(str(err))
+            sys.exit(ABORT_STATUS)
+        finally:
+            self.clean_up()
 
 
 # vim: textwidth=120 foldmethod=indent foldlevel=0
