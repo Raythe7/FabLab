@@ -8,7 +8,7 @@ Pour commencer, créez ou importez votre dessin (esquisse).
 
 Ensuite, sélectionnez votre dessin à l'aide de ``l'outil de sélection``.
 
-Vous pouvez également effectuer cette sélection directement dans l'onglet ``Layers and object``s.
+Vous pouvez également effectuer cette sélection directement dans l'onglet ``Layers and objects``.
 
 .. image:: image_tuto/ZIP.png
 :alt: ZIP
