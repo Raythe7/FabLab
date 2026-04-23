@@ -52,18 +52,18 @@ SOUS LINUX( Ubuntu )
 Une fois sur la page GitHub, appuyez sur le bouton vert "Code".
 
 .. image:: image_tuto/Code_vert.png
-:alt: Mon code vert
+   :alt: Mon code vert
 
 Cliquez ensuite sur ``"Download ZIP"`` pour télécharger l'archive.
 
 .. image:: image_tuto/ZIP.png
-:alt: ZIP
+   :alt: ZIP
 
 Rendez-vous ensuite dans le fichier FabLab-main 
 puis ouvrez un terminal.
 
 .. image:: image_tuto/dossierLinux.png
-:alt: dossierLinux
+   :alt: dossierLinux
 
 Dans ce terminal, exécutez cette ligne de code:
 ``make LANG=fr very-clean install``
