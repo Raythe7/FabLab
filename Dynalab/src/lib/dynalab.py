@@ -643,9 +643,10 @@ class Ext(inkex.EffectExtension, config.Ext, i18n.Ext):
             self.load_raw()
             if self.use_thread:
                 t = threading.Thread(target=self.effect)
+                t.daemon = True  # Le thread sera tué brutalement quand le thread principal s'arrête
                 t.start()
                 t.join(timeout)
-                self.stop_event.set()
+                #self.stop_event.set()
                 self.save_raw(None)
             else:
                 self.save_raw(self.effect())

@@ -212,7 +212,6 @@ class MarkCircleOverlaps(dynalab.Ext):
         counter_pairs = 0
 
         for i in range(len(data)):
-            if self.stop_event.is_set(): return
             s1 = data[i]
             id1 = s1["id"]
             bb1 = s1["bbox"]
