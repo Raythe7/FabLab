@@ -20,15 +20,15 @@ Une fois la sélection effectuée, rendez-vous dans l'extension Dynalab et utili
 
 Une fenêtre s'ouvre : vous y trouverez le type de mesure, l'unité et le matériau.
 
-.. image:: image_tuto/Roaming.png
-:alt: Roaming
+.. image:: image_tuto/fenetre.png
+:alt: fenetre
 
 Une fois que vous avez saisi les paramètres souhaités, il vous suffit d'appuyer sur le bouton Apply.
 
-.. image:: image_tuto/Roaming.png
-:alt: Roaming
+.. image:: image_tuto/apply.png
+:alt: apply
 
 Une fenêtre apparaîtra alors avec le temps estimé de votre dessin.
 
-.. image:: image_tuto/extract.png
-:alt: extract
+.. image:: image_tuto/temps.png
+:alt: temps
