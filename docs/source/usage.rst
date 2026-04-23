@@ -46,5 +46,28 @@ Une fois les fichiers extraits, vous pouvez lancer le logiciel Inkscape pour pro
 .. image:: image_tuto/extention.png
    :alt: extention
 
+SOUS LINUX( Ubuntu )
+----------
 
+Une fois sur la page GitHub, appuyez sur le bouton vert "Code".
 
+.. image:: image_tuto/Code_vert.png
+:alt: Mon code vert
+
+Cliquez ensuite sur ``"Download ZIP"`` pour télécharger l'archive.
+
+.. image:: image_tuto/ZIP.png
+:alt: ZIP
+
+Rendez-vous ensuite dans le fichier FabLab-main 
+puis ouvrez un terminal.
+
+.. image:: image_tuto/dossierLinux.png
+:alt: dossierLinux
+
+Dans ce terminal, exécutez cette ligne de code:
+``make LANG=fr very-clean install``
+OU
+``make LANG=en very-clean install``
+
+Vous pouvez maintenant profiter de l'extension. 
