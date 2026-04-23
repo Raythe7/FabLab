@@ -153,7 +153,8 @@ class MeasureLength(dynalab.Ext):
             values = csvReader.readLengthCSV(self.options.materials)
             estimedTime = taille * values
 
-
+        if self.options.unit == "cm":
+            estimedTime = estimedTime*10
         #Calcul de l'intervalle
         interval = csvReader.formater_intervalle(estimedTime);
 
