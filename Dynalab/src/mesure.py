@@ -30,13 +30,13 @@ http://mathworld.wolfram.com/GreensTheorem.html
 
 import inkex
 
-from gettext import gettext as _
+#from gettext import gettext as _
 
 from lib import dynalab,csvReader
 
 
 from inkex.bezier import csparea, cspcofm
-from inkex.localization import inkex_gettext as _
+#from inkex.localization import inkex_gettext as _
 from inkex.paths.interfaces import LengthSettings
 
 
