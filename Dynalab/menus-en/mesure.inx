@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<inkscape-extension xmlns="http://www.inkscape.org/namespace/inkscape/extension">
+    <id>dynalab.MeasureLength</id>
+
+    <effect needs-live-preview="false" needs-document="true">
+        <effects-menu>
+            <submenu name=" Dynalab">
+            </submenu>
+        </effects-menu>
+    </effect>
+    <name>3 - Set creation time</name>
+
+    <param translatable="no" name="type" type="optiongroup" appearance="combo" gui-text="Measurement Type:">
+        <option translatable="no" value="length">Length</option>   
+        <option translatable="no" context="measure extension" value="area">Area</option>
+    </param>
+    <param translatable="no" name="unit" type="optiongroup" appearance="combo" gui-text="Length Unit:">
+        <option translatable="no" value="mm">mm</option>
+        <option translatable="no" value="cm">cm</option>
+    </param>
+    <param name="materials" type="optiongroup" appearance="combo" gui-text="Materials:">
+        <option value="1">Paper</option>
+        <option value="2">Plywood 5mm</option>
+        <option value="3">Plywood 10mm</option>
+        <option value="4">Rubber</option>
+        <option value="5">Cardboard</option>
+        <option value="6">Plywood engraved</option>
+        <option value="7">Textile</option>
+    </param>
+    <script>
+        <command location="inx" interpreter="python">../src/mesure.py</command>
+    </script>
+</inkscape-extension>
