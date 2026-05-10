@@ -44,9 +44,9 @@ class MeasureLength(dynalab.Ext):
     """Measure the length of selected paths"""
 
     def add_arguments(self, pars):
-        pars.add_argument(
-            "--type", dest="mtype", default="length", help="Type of measurement"
-        )
+        # pars.add_argument(
+        #     "--type", dest="mtype", default="length", help="Type of measurement"
+        # )
 
         pars.add_argument(
             "--materials", dest="materials", type=int, default=1, help="Type of materials"
@@ -79,7 +79,7 @@ class MeasureLength(dynalab.Ext):
             help="The distance above the curve",
         )
         pars.add_argument(
-            "-u", "--unit", default="px", help="The unit of the measurement"
+            "-u", "--unit", default="mm", help="The unit of the measurement"
         )
         pars.add_argument(
             "-p",
@@ -97,8 +97,11 @@ class MeasureLength(dynalab.Ext):
         )
 
     def effect(self):
+        fill_mode_color = self.config["laser_mode_fill_color"]
+        
         estimedTime = 0
-        taille = 0
+        estimedTimeCut = 0
+        tailleArea,tailleCut = 0,0
         # get number of digits
         prec = int(self.options.precision)
         scale = self.svg.viewport_to_unit(
@@ -129,41 +132,43 @@ class MeasureLength(dynalab.Ext):
         
         for node in paths:            
             path: inkex.Path = node.path.transform(node.composed_transform())
-            if self.options.mtype == "length":
+            if node.style.get("stroke")!=fill_mode_color: #Element de type decoupe
                 settings = LengthSettings(error=1e-8)
                 stotal = sum(
                     command.length(settings=settings)
                     for command in path.proxy_iterator()
                     if command.letter not in "mM"
                 )
+                val = round(stotal * factor * self.options.scale, prec)
+                tailleCut += val
                 #self.group = node.getparent().add(TextElement())
-            elif self.options.mtype == "area":
+            elif node.style.get("stroke")==fill_mode_color: #Element de type gravure remplissage
                 csp = path.to_superpath()
                 stotal = abs(csparea(csp) * factor * self.options.scale)
+                val = round(stotal * factor * self.options.scale, prec)
+                tailleArea += val
             else:
                 continue
-            # Format the length as string
-            val = round(stotal * factor * self.options.scale, prec)
-            taille += val
+        # if (self.options.unit == "cm") == True:
+        #     tailleArea = tailleArea*100
+        #     tailleCut = tailleCut*100
+            
+        values = csvReader.readAreaCSV(self.options.materials)
+        estimedTime = tailleArea * values
+        values = csvReader.readLengthCSV(self.options.materials)
+        estimedTimeCut = tailleCut * values
 
-        if self.options.mtype == "area":
-            values = csvReader.readAreaCSV(self.options.materials)
-            estimedTime = taille * values
-        else:
-            values = csvReader.readLengthCSV(self.options.materials)
-            estimedTime = taille * values
-
-        if self.options.unit == "cm":
-            estimedTime = estimedTime*10
         #Calcul de l'intervalle
         interval = csvReader.formater_intervalle(estimedTime);
+        intervalCut = csvReader.formater_intervalle(estimedTimeCut);
 
         self.message(
             _(
                 """
-                Le chemin va prendre environ {interval} à être dessiné
+                La forme va prendre environ {interval} à être gravé
+                La forme va prendre environ {intervalCut} à être coupé
                 """
-            ).format(interval=interval)
+            ).format(interval=interval,intervalCut=intervalCut)
         )
         # self.message(
         #     _(

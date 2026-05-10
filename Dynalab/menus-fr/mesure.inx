@@ -10,14 +10,14 @@
     </effect>
     <name>3 - Définir Temps de création</name>
 
-    <param name="type" type="optiongroup" appearance="combo" gui-text="Measurement Type:">
+    <!-- <param name="type" type="optiongroup" appearance="combo" gui-text="Measurement Type:">
         <option value="length">Length</option>   
         <option context="measure extension" value="area">Area</option>
-    </param>
-    <param name="unit" type="optiongroup" appearance="combo" gui-text="Length Unit:">
+    </param> -->
+    <!-- <param name="unit" type="optiongroup" appearance="combo" gui-text="Length Unit:">
         <option translatable="no" value="mm">mm</option>
         <option translatable="no" value="cm">cm</option>
-    </param>
+    </param> -->
     <param name="materials" type="optiongroup" appearance="combo" gui-text="Matériaux:">
         <option value="1">Papier</option>
         <option value="2">CP 5mm</option>
