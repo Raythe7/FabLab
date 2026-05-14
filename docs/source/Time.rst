@@ -1,34 +1,29 @@
 Temps de création d'un dessin
 =====
 
-.. _Time:
+.. _time:
 
-Procédure
-Pour commencer, créez ou importez votre dessin (esquisse).
+Prérequis : avoir un dessin avec les couleurs (`couleurs`_).
 
-Ensuite, sélectionnez votre dessin à l'aide de ``l'outil de sélection``.
+Pour commencer, sélectionnez votre dessin à l'aide de ``l'outil de sélection``.
 
 Vous pouvez également effectuer cette sélection directement dans l'onglet ``Layers and objects``.
 
-.. image:: image_tuto/Layers.png
+.. image:: image_tuto/temps_selection.png
 
 
 Une fois la sélection effectuée, rendez-vous dans l'extension Dynalab et utilisez l'option ``3- Définir temps de création``.
 
-.. image:: image_tuto/def_temps.png
+.. image:: image_tuto/temps_extension.png
 
 
-Une fenêtre s'ouvre : vous y trouverez le type de mesure, l'unité et le matériau.
+Une fenêtre s'ouvre : vous y trouverez la liste des matériaux utilisables.
+Une fois que vous avez saisi le paramètre souhaité, il vous suffit d'appuyer sur le bouton ``appliquer``.
 
-.. image:: image_tuto/fenetre.png
-
-
-Une fois que vous avez saisi les paramètres souhaités, il vous suffit d'appuyer sur le bouton Apply.
-
-.. image:: image_tuto/apply.png
+.. image:: image_tuto/temps_option.png
 
 
-Une fenêtre apparaîtra alors avec le temps estimé de votre dessin.
+Une fenêtre apparaîtra alors avec les temps moyens estimés de votre dessin, pour la gravure et la découpe.
 
-.. image:: image_tuto/temps.png
+.. image:: image_tuto/temps_resultat.png
 
