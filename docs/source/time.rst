@@ -3,7 +3,7 @@ Temps de création d'un dessin
 
 .. _time:
 
-Prérequis : avoir un dessin avec les couleurs :ref:`couleurs <couleurs>`.
+Prérequis : avoir un dessin avec les :ref:`couleurs <couleurs>`.
 
 Pour commencer, sélectionnez votre dessin à l'aide de ``l'outil de sélection``.
 
