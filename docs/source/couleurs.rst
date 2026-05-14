@@ -23,13 +23,13 @@ Puis sélectionner la couleur voulue pour avoir le rendu souhaité.
 
 La couleur 'découpe' sera rouge :
 
-.. image:: image_tuto/couleur_decoupe.png
+.. image:: image_tuto/couleurs_decoupe.png
 
 La couleur 'gravure contour' sera noire :
 
-.. image:: image_tuto/couleur_gravure_contour.png
+.. image:: image_tuto/couleurs_gravure_contour.png
 
 La couleur 'gravure remplissage' sera bleue :
 
-.. image:: image_tuto/couleur_gravure_remplissage.png
+.. image:: image_tuto/couleurs_gravure_remplissage.png
 
