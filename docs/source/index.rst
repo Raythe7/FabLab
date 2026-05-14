@@ -18,5 +18,6 @@ Contents
 .. toctree::
 
    usage
-   Time
+   couleurs
+   time
    api
