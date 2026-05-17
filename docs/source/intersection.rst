@@ -1,5 +1,5 @@
 Détecter les intersections et superpositions
-=====
+=======
 
 .. _intersection:
 
