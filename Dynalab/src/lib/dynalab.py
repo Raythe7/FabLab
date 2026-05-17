@@ -8,7 +8,7 @@ from tempfile import TemporaryDirectory
 import sys
 import os
 
-import io  # Manquant dans ton code
+import io
 
 
 
@@ -16,7 +16,7 @@ import inkex
 import threading
 from inkex.paths import Line, Move
 from inkex.base import ABORT_STATUS        # Pour le code de sortie
-
+from inkex import AbortExtension, errormsg
 from lib import config, i18n, utils
 
 ARTIFACT_CLASS = "artifact"
@@ -646,7 +646,12 @@ class Ext(inkex.EffectExtension, config.Ext, i18n.Ext):
                 t.daemon = True  # Le thread sera tué brutalement quand le thread principal s'arrête
                 t.start()
                 t.join(timeout)
-                #self.stop_event.set()
+                if t.is_alive():
+                    self.stop_event.set()
+                    errormsg(
+                        f"ATTENTION : Le calcul a été interrompu (Délai de {timeout}s dépassé).\n"
+                        f"Seuls les résultats partiels trouvés avant la limite sont affichés."
+                    )
                 self.save_raw(None)
             else:
                 self.save_raw(self.effect())
