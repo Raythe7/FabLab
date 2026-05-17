@@ -3,16 +3,17 @@ Temps de création d'un dessin
 
 .. _time:
 
-Prérequis : avoir un dessin avec les :ref:`couleurs <couleurs>`.
+Prérequis : avoir un dessin avec les bonnes :ref:`couleurs <couleurs>`au risque d'avoir un résultat érroné.
 
-Pour commencer, sélectionnez votre dessin à l'aide de ``l'outil de sélection``.
+Pour commencer, si vous souhaitez savoir quel partie du dessin prendra quel temps à être usiné précisément,
+sélectionnez directement cette partie à l'aide de ``l'outil de sélection``.
 
 Vous pouvez également effectuer cette sélection directement dans l'onglet ``Layers and objects``.
 
 .. image:: image_tuto/temps_selection.png
 
 
-Une fois la sélection effectuée, rendez-vous dans l'extension Dynalab et utilisez l'option ``3- Définir temps de création``.
+Une fois la sélection effectuée ou non, rendez-vous dans l'extension Dynalab et utilisez l'option ``3- Définir temps de création``.
 
 .. image:: image_tuto/temps_extension.png
 
