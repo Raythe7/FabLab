@@ -1,5 +1,5 @@
 Norme de coloration d'un projet
-========
+=====
 
 .. _couleurs:
 
