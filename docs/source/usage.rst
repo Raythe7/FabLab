@@ -48,6 +48,7 @@ Une fois les fichiers extraits, vous pouvez lancer le logiciel Inkscape pour pro
 
 SOUS LINUX( Ubuntu )
 ----------
+Vous pouvez utilisez la même méthode que précédement.
 
 Une fois sur la page GitHub, appuyez sur le bouton vert "Code".
 
@@ -71,3 +72,4 @@ OU
 ``make LANG=en very-clean install``
 
 Vous pouvez maintenant profiter de l'extension. 
+Attention, fonctionne dans le cas où vous avez installez Inkscape à partir du terminal.
