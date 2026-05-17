@@ -1,6 +1,8 @@
 Détecter les intersections et superpositions
 =====
 
+.. _intersection:
+
 Lorsque l'on veut usiner notre projet, il faut faire attention à ce qu'il n'y ai pas de superposition ni d'intersection
 au risque de ne pas avoir le résultat voulu, voire pire provoquer un incident.
 
