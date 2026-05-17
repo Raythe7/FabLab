@@ -20,4 +20,5 @@ Contents
    usage
    couleurs
    time
+   intersection
    api
