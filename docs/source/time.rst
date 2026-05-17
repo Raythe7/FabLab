@@ -3,7 +3,7 @@ Temps de création d'un dessin
 
 .. _time:
 
-Prérequis : avoir un dessin avec les bonnes :doc:`couleurs <couleurs>`au risque d'avoir un résultat érroné.
+Prérequis : avoir un dessin avec les bonnes :doc:`couleurs <couleurs>` au risque d'avoir un résultat erroné.
 
 Pour commencer, si vous souhaitez savoir quel partie du dessin prendra quel temps à être usiné précisément,
 sélectionnez directement cette partie à l'aide de ``l'outil de sélection``.
