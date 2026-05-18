@@ -6,9 +6,9 @@ Installation
 Lien Github
 ------------
 
-Pour commencer rendez vous sur ce lien github : https://github.com/Raythe7/FabLab/
+Pour commencer, rendez-vous sur ce lien github : https://github.com/Raythe7/FabLab/
 
-Installation du fichier de l'extention
+Installation du fichier de l'extension
 ----------------
 Une fois sur la page GitHub, appuyez sur le bouton vert "Code".
 
@@ -27,7 +27,7 @@ Dans la fenêtre qui s'ouvre, tapez ``%appdata%`` et validez par Entrée.
 .. image:: image_tuto/appdata.png
    :alt: appdata
 
-L'explorateur de fichiers s'ouvre : ouvrer le dossier ``Romaing`` et cherchez puis ouvrez le dossier nommé ``Inkscape``.
+L'explorateur de fichiers s'ouvre : ouvrer le dossier ``Roaming`` et cherchez puis ouvrez le dossier nommé ``Inkscape``.
 
 .. image:: image_tuto/Roaming.png
    :alt: Roaming
@@ -45,31 +45,3 @@ Une fois les fichiers extraits, vous pouvez lancer le logiciel Inkscape pour pro
 
 .. image:: image_tuto/extention.png
    :alt: extention
-
-SOUS LINUX( Ubuntu )
-----------
-Vous pouvez utilisez la même méthode que précédement.
-
-Une fois sur la page GitHub, appuyez sur le bouton vert "Code".
-
-.. image:: image_tuto/Code_vert.png
-   :alt: Mon code vert
-
-Cliquez ensuite sur ``"Download ZIP"`` pour télécharger l'archive.
-
-.. image:: image_tuto/ZIP.png
-   :alt: ZIP
-
-Rendez-vous ensuite dans le fichier FabLab-main 
-puis ouvrez un terminal.
-
-.. image:: image_tuto/dossierLinux.png
-   :alt: dossierLinux
-
-Dans ce terminal, exécutez cette ligne de code:
-``make LANG=fr very-clean install``
-OU
-``make LANG=en very-clean install``
-
-Vous pouvez maintenant profiter de l'extension. 
-Attention, fonctionne dans le cas où vous avez installez Inkscape à partir du terminal.
