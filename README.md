@@ -60,8 +60,13 @@ The initial POC for this extension was written by
   - [Jassem Bakouche]( https://github.com/jassemBAKHOUCHE)
 The original repository is https://github.com/jassemBAKHOUCHE/Path2Fab
 
-The extension has been rewritten and is currently being developed by
-  - [Pierre Hyvernat](https://github.com/phyver/)
+The extension has been reworked by
+  - L. Théo
+  - B. Ilias
+  - B. Antonin
+  - M. Riyad
+Overseen by [Pierre Hyvernat](https://github.com/phyver/) with its version.
+
 The current repository is https://github.com/phyver/dynalab_ext/tree/main.
 
 
